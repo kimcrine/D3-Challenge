@@ -50,3 +50,31 @@ d3.csv("/assets/data/data.csv")
 
     chartGroup.append("g")
       .call(leftAxis);
+
+    // Create circles
+    var circlesGroup = chartGroup.selectAll("circle").data(healthdata).enter();
+  
+    circlesGroup.append("circle")
+    .attr("cx", d => xLinearScale(d.poverty))
+    .attr("cy", d => yLinearScale(d.healthcare))
+    .attr("r", "15")
+    .attr("fill", "lightblue")
+    .attr("opacity", ".9")
+    .on("click", d => toolTip.show(d));
+  
+  circlesGroup.append("text")
+    .text(function(data){
+      return data.abbr; 
+    })
+    .attr("dx", d => xLinearScale(d.poverty))
+     .attr("dy", d => yLinearScale(d.healthcare)+10/2.5)
+     .attr("font-size","9")
+     .attr("class","stateText")
+     .on("mouseover", function(data, index) {
+       toolTip.show(data);
+     d3.select(this).style("stroke","#323232")
+     })
+     .on("mouseout", function(data, index) {
+         toolTip.hide(data)
+      d3.select(this).style("stroke","#e3e3e3")
+     });
